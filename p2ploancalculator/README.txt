@@ -15,7 +15,7 @@ The executable jar file will be saved to /target/p2pcalc-jar-with-dependencies.j
 HOW TO USE
 After the project was successfully build, execute in root folder:
 cd target
-java -jar p2pcalc-jar-with-dependencies.jar <path to file> <Loan length, any integer between 1 and 84> <amount, any 100 between 1000 and 15000>
+java -jar p2pcalc-jar-with-dependencies.jar <path to file> <Loan length, any integer between 1 and 84> <amount, any 100 between 1000 and 20000>
 e.g.
 java -jar p2pcalc-jar-with-dependencies.jar ../inputdata.csv 36 1000
 
