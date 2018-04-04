@@ -46,6 +46,8 @@ public class RateCalculationApplicationTest {
 
     @Test
     public void shouldReportEmptyArgs() {
-        rateCalculationApplication.validateInputParameters(new String[0], System.out);
+        rateCalculationApplication.validateInputParameters(new String[0], printStream);
+        Mockito.verify(printStream).println("Invalid usage. Please provide valid filename, month count and loan amount, e.g. filename.csv 36 1500");
+        Mockito.verifyNoMoreInteractions(printStream);
     }
 }

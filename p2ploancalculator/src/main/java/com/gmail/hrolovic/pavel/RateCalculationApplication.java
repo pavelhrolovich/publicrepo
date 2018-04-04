@@ -18,7 +18,7 @@ public class RateCalculationApplication {
         rateCalculationApplication.runApplication(args);
     }
 
-    public void runApplication(String[] args) {
+    private void runApplication(String[] args) {
         if (!validateInputParameters(args, System.out)) {
             return;
         }
@@ -32,7 +32,7 @@ public class RateCalculationApplication {
 
     protected boolean validateInputParameters(String[] args, PrintStream printStream) {
         if (args.length != 3) {
-            System.out.println("Invalid usage. Please provide valid filename, month count and loan amount, e.g. filename.csv 36 1500");
+            printStream.println("Invalid usage. Please provide valid filename, month count and loan amount, e.g. filename.csv 36 1500");
             return false;
         }
         String filename = args[0];

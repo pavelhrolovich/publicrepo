@@ -8,8 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class InputFileBasedOfferCalculationRequest implements OfferCalculationRequest {
-    private static final int MONTH_AMOUNT = 36;
-
     private String filename;
     private int desiredAmount;
     private int monthAmount;
