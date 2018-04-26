@@ -1,4 +1,4 @@
-#TASK
+TASK
 You have a carpet with holes. You have to find the largest possible carpet part without hole.
 Use Kotlin as a language
 
@@ -14,7 +14,7 @@ Holes:
 Return:
 210.0 x 154
 
-#SOLUTION
+SOLUTION
 1. Take 1st hole
 2. Cut carpet into 4 pieces (2 horizontal and 2 vertical)
 3. Check every piece for hole
