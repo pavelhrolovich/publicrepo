@@ -1,10 +1,10 @@
-# UBNT homework: pushstream webservice
+# Pushstream webservice
 
 ## Prerequisites
 
 - Java 1.8+
 - Maven 3.2+
-- Memory settings: for a day operation should run on 512 Xmx setting
+- Memory settings: for a day operation should run on 512mb as Xmx setting
 
 ## Installation
 
@@ -17,7 +17,6 @@ Execute maven packaging goal:
 
 ### Deploy to tomcat
 - package server: mvn clean package -Ptomcat
-- I recommend to have at least 512m available
 - deploy WAR application to tomcat instance, force application to start
 
 ## How to test the service 
@@ -26,14 +25,7 @@ Swagger UI is configured on the server. Please look /swagger-ui.html
 
 ## Pros and cons
 
-The solution is memory based, so it require 512M of heap in order to run without having OOM errors. 
-The exact memory setting is not known and is not in scope of the task to determine proper memory settings. 
-The server does not have any cleanup of the in-memory storage, it is not required for a homework like this. 
-The server has a tradeoff between memory consumption and user experience in favor of memory consumption, so the
- server exposes live view of current stats to the user and require paging. This might lead for API to return
-  inconsistent results over pages. 
-   
-## Sample application
-
-It is deployed to AWS. 
-See http://ec2dashboard.eu-central-1.elasticbeanstalk.com/swagger-ui.html
+The solution is memory based, so on a long run it require 512M of heap in order to run without having OOM errors. 
+The exact memory setting is not known and is not in scope of the task to determine proper memory settings. Also, the server does not have any cleanup of the in-memory storage, it is not required for a homework like this. 
+The server exposes live view of current stats to the user and require to use paging to fetch all records via API
+. This might lead for API to return inconsistent results over pages. 
