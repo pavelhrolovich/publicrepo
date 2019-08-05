@@ -14,15 +14,11 @@ Execute maven packaging goal:
 - run server from the target directory:
     - cd /target
     - java -DXmx512m -Xms256m -jar ubnt-homework.jar
-   
-You can see a jar file in the application root folder 
 
 ### Deploy to tomcat
 - package server: mvn clean package -Ptomcat
 - I recommend to have at least 512m available
 - deploy WAR application to tomcat instance, force application to start
-
-You can see a war file in the application root folder
 
 ## How to test the service 
 
