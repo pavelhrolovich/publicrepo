@@ -14,12 +14,12 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * This is to pay your attention the application scope / singletin is an important here. We only
- * need to read one event from stream
+ * need to read event from stream via single source per application
  */
 @Component
 @Slf4j
 @AllArgsConstructor
-public class PushshiftHttpEventStreamService {
+public class PushshiftHttpEventStreamReader {
     private static final String URL = "https://stream.pushshift.io/";
     private static final int ONE_SECOND = 1000;
 
@@ -41,7 +41,7 @@ public class PushshiftHttpEventStreamService {
                     try {
                         Thread.sleep(ONE_SECOND);
                     } catch (InterruptedException e) {
-
+                        log.warn("Waiting thread was interrupted.");
                     }
                 }
             }

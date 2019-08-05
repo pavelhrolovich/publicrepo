@@ -1,10 +1,10 @@
 package com.gmail.phrolovich;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gmail.phrolovich.api.RedditStatistic;
-import com.gmail.phrolovich.integration.PushshiftHttpEventStreamService;
+import com.gmail.phrolovich.api.RedditResponse;
+import com.gmail.phrolovich.integration.PushshiftHttpEventStreamReader;
 import com.gmail.phrolovich.integration.RedditStatisticEvent;
-import com.gmail.phrolovich.storage.RedditStorage;
+import com.gmail.phrolovich.storage.SubredditStatisticService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,12 +35,12 @@ public class ServiceE2ETest {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
     @Autowired
-    private RedditStorage storage;
+    private SubredditStatisticService storage;
     @Autowired
     private WebApplicationContext wac;
 
     @MockBean
-    private PushshiftHttpEventStreamService service; // disable real http event service
+    private PushshiftHttpEventStreamReader service; // disable real http event service
 
     private MockMvc mockMvc;
 
@@ -138,7 +138,7 @@ public class ServiceE2ETest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
-        RedditStatistic[] list = new ObjectMapper().readValue(result.andReturn().getResponse().getContentAsByteArray(), RedditStatistic[].class);
+        RedditResponse[] list = new ObjectMapper().readValue(result.andReturn().getResponse().getContentAsByteArray(), RedditResponse[].class);
         Assert.assertNotNull(list);
         Assert.assertEquals(6, list.length);
 
@@ -203,7 +203,7 @@ public class ServiceE2ETest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"));
 
-        RedditStatistic[] list = new ObjectMapper().readValue(result.andReturn().getResponse().getContentAsByteArray(), RedditStatistic[].class);
+        RedditResponse[] list = new ObjectMapper().readValue(result.andReturn().getResponse().getContentAsByteArray(), RedditResponse[].class);
         Assert.assertNotNull(list);
         Assert.assertEquals(6, list.length);
 

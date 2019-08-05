@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
-public class WordGraph {
+class WordGraph {
     private static final int PAGE_SIZE = 100;
     private static final int ALL_SLICES = -1;
     private ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
@@ -25,7 +25,7 @@ public class WordGraph {
     private List<Node> wordEndNodes = new LinkedList<>();
     private int size;
 
-    public void save(String nodeName) {
+    void save(String nodeName) {
         Objects.requireNonNull(nodeName, "Node name is required");
         String finalNodeName = nodeName.toLowerCase();
         rootNodes.computeIfAbsent(finalNodeName.charAt(0),
@@ -75,7 +75,7 @@ public class WordGraph {
         }
     }
 
-    public int getStatsForSlice(int sliceCount) {
+    int getStatsForSlice(int sliceCount) {
         readWriteLock.readLock().lock();
         List<Node> nodes = new ArrayList<>(wordEndNodes);
         readWriteLock.readLock().unlock();
@@ -106,7 +106,7 @@ public class WordGraph {
         return 0;
     }
 
-    public List<SubredditStatistic> getMostPopularWordsPerSlice(int slices, int page) {
+    List<SubredditStatistic> getMostPopularWordsPerSlice(int slices, int page) {
         readWriteLock.readLock().lock();
         List<Node> nodes = wordEndNodes.stream()
                 .sorted((o1, o2) -> Integer.compare(o2.getStatsForSlice(slices),
@@ -138,13 +138,13 @@ public class WordGraph {
         return size;
     }
 
-    public void adjustSlices() {
+    void adjustSlices() {
         readWriteLock.writeLock().lock();
         wordEndNodes.parallelStream().forEach(Node::adjustSlice);
         readWriteLock.writeLock().unlock();
     }
 
-    public void clear() {
+    void clear() {
         readWriteLock.writeLock().lock();
         wordEndNodes.clear();
         rootNodes.clear();
@@ -157,8 +157,9 @@ public class WordGraph {
         private static final int ONE_DAY = 1440;
         @Getter
         private char letter;
-        @Getter @Setter
-        private boolean lastCharacterInWord; // Defines lead node
+        @Getter
+        @Setter
+        private boolean lastCharacterInWord;
         @Getter
         private AtomicInteger allSlicesCount;
         private AtomicInteger currentSliceCount;
@@ -168,7 +169,7 @@ public class WordGraph {
 
         private Deque<Integer> timeSlice = new LinkedList<>();
 
-        public Node(Character character, Node parent) {
+        Node(Character character, Node parent) {
             this.letter = character;
             this.parent = parent;
             this.subNodes = new ConcurrentHashMap<>();
@@ -184,11 +185,11 @@ public class WordGraph {
             return subNodes.get(character);
         }
 
-        public void incrementStats() {
+        void incrementStats() {
             this.currentSliceCount.incrementAndGet();
         }
 
-        public int getStatsForSlice(int periodInMinutes) {
+        int getStatsForSlice(int periodInMinutes) {
             if (periodInMinutes == ALL_SLICES) {
                 return currentSliceCount.get() + getAllSlicesCount().get();
             }
@@ -202,7 +203,7 @@ public class WordGraph {
             return result;
         }
 
-        public void adjustSlice() {
+        void adjustSlice() {
             allSlicesCount.addAndGet(currentSliceCount.get());
             timeSlice.addFirst(currentSliceCount.get());
             currentSliceCount = new AtomicInteger(0);

@@ -2,7 +2,7 @@ package com.gmail.phrolovich.storage;
 
 import java.util.List;
 
-public interface RedditStorage {
+public interface SubredditStatisticService {
 
     /**
      * Store the Reddit stream event: comment or subreddit

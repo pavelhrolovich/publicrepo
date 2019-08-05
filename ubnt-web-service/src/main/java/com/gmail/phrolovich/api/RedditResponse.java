@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RedditStatistic {
-    String name;
-    int count;
+public class RedditResponse {
+    private String name;
+    private int count;
 }

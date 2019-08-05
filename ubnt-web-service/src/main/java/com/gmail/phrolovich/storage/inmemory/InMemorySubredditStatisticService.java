@@ -2,7 +2,7 @@ package com.gmail.phrolovich.storage.inmemory;
 
 import com.gmail.phrolovich.storage.SubredditStatistic;
 import com.gmail.phrolovich.storage.SubredditStreamData;
-import com.gmail.phrolovich.storage.RedditStorage;
+import com.gmail.phrolovich.storage.SubredditStatisticService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,14 +13,14 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class InMemoryRedditStorage implements RedditStorage {
+public class InMemorySubredditStatisticService implements SubredditStatisticService {
     private static final String REDDIT_COMMENT = "rc";
     private static final String REDDIT_SUBMISSION = "rs";
-    public static final int ALL_SLICES = -1;
+    private static final int ALL_SLICES = -1;
 
     private final WordGraph graph;
 
-    public InMemoryRedditStorage() {
+    public InMemorySubredditStatisticService() {
         this.graph = new WordGraph();
     }
 
@@ -57,7 +57,7 @@ public class InMemoryRedditStorage implements RedditStorage {
 
     @Scheduled(fixedRate = 60000, initialDelay = 60000)
     public void printStats() {
-        log.info("Storage size: " + graph.getSize());
+        log.info("Begin print most popular subreddis with comments, current graph size: " + graph.getSize());
         int max = 100;
         List<SubredditStatistic> chart = graph.getMostPopularWordsPerSlice(ALL_SLICES, 1);
         Iterator<SubredditStatistic> iterator = chart.iterator();

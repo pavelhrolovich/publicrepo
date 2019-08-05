@@ -28,10 +28,6 @@ import static com.google.common.collect.Lists.newArrayList;
 @EnableSwagger2
 public class SwaggerConfig {
 
-
-    private String clientId = "aws-dashboard-client";
-    private String clientSecret = "aws-dashboard-secret";
-
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -68,11 +64,6 @@ public class SwaggerConfig {
         authorizationScopes[0] = new AuthorizationScope("read", "read all EC2 instances");
 
         return Collections.singletonList(new SecurityReference("oauth2schema", authorizationScopes));
-    }
-
-    @Bean
-    public SecurityConfiguration securityInfo() {
-        return new SecurityConfiguration(clientId, clientSecret, "", "", "", ApiKeyVehicle.HEADER, "", " ");
     }
 
     private ApiInfo apiInfo() {
