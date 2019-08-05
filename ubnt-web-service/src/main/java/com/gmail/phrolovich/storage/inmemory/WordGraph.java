@@ -1,9 +1,11 @@
 package com.gmail.phrolovich.storage.inmemory;
 
 import com.gmail.phrolovich.storage.SubredditStatistic;
+import com.google.common.base.Stopwatch;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.ArrayList;
@@ -13,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
+@Slf4j
 class WordGraph {
     private static final int PAGE_SIZE = 100;
     private static final int ALL_SLICES = -1;
@@ -34,8 +38,11 @@ class WordGraph {
                     boolean isFinalCharInWord = finalNodeName.length() == 1;
                     if (isFinalCharInWord) {
                         readWriteLock.writeLock().lock();
-                        wordEndNodes.add(node);
-                        readWriteLock.writeLock().unlock();
+                        try {
+                            wordEndNodes.add(node);
+                        } finally {
+                            readWriteLock.writeLock().unlock();
+                        }
                         size++;
                     }
                     node.setLastCharacterInWord(isFinalCharInWord);
@@ -61,24 +68,35 @@ class WordGraph {
             processingNode = subnode;
             if (lastCharacterInWord) {
                 readWriteLock.writeLock().lock();
-                boolean wordAddedToStorage = wordEndNodes.remove(processingNode);
-                readWriteLock.writeLock().unlock();
-                if (!wordAddedToStorage) {
-                    size++;
+                try {
+                    boolean wordAddedToStorage = wordEndNodes.remove(processingNode);
+                    if (!wordAddedToStorage) {
+                        size++;
+                    }
+                } finally {
+                    readWriteLock.writeLock().unlock();
                 }
+
                 processingNode.setLastCharacterInWord(true);
                 processingNode.incrementStats();
                 readWriteLock.writeLock().lock();
-                wordEndNodes.add(processingNode);
-                readWriteLock.writeLock().unlock();
+                try {
+                    wordEndNodes.add(processingNode);
+                } finally {
+                    readWriteLock.writeLock().unlock();
+                }
             }
         }
     }
 
     int getStatsForSlice(int sliceCount) {
         readWriteLock.readLock().lock();
-        List<Node> nodes = new ArrayList<>(wordEndNodes);
-        readWriteLock.readLock().unlock();
+        List<Node> nodes;
+        try {
+            nodes = new ArrayList<>(wordEndNodes);
+        } finally {
+            readWriteLock.readLock().unlock();
+        }
         int result = 0;
         for (Node processing : nodes) {
             result = result + processing.getStatsForSlice(sliceCount);
@@ -107,6 +125,7 @@ class WordGraph {
     }
 
     List<SubredditStatistic> getMostPopularWordsPerSlice(int slices, int page) {
+        Stopwatch popularItemsCalculator = Stopwatch.createStarted();
         readWriteLock.readLock().lock();
         List<Node> nodes = wordEndNodes.stream()
                 .sorted((o1, o2) -> Integer.compare(o2.getStatsForSlice(slices),
@@ -131,6 +150,8 @@ class WordGraph {
             }
             break;
         }
+        long elapsed = popularItemsCalculator.elapsed(TimeUnit.MILLISECONDS);
+        log.info("Calculated time: " + elapsed);
         return result;
     }
 
@@ -140,16 +161,22 @@ class WordGraph {
 
     void adjustSlices() {
         readWriteLock.writeLock().lock();
-        wordEndNodes.parallelStream().forEach(Node::adjustSlice);
-        readWriteLock.writeLock().unlock();
+        try {
+            wordEndNodes.parallelStream().forEach(Node::adjustSlice);
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
     }
 
     void clear() {
         readWriteLock.writeLock().lock();
-        wordEndNodes.clear();
-        rootNodes.clear();
-        size = 0;
-        readWriteLock.writeLock().unlock();
+        try {
+            wordEndNodes.clear();
+            rootNodes.clear();
+            size = 0;
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
     }
 
     @EqualsAndHashCode(of = {"letter", "parent"})
