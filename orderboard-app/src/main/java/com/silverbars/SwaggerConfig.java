@@ -1,4 +1,4 @@
-package com.gmail.phrolovich.config;
+package com.silverbars;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,49 +28,20 @@ import static com.google.common.collect.Lists.newArrayList;
 @EnableSwagger2
 public class SwaggerConfig {
 
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.gmail.phrolovich.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.silverbars.controller"))
                 .build()
-                .securitySchemes(Collections.singletonList(securitySchema()))
-                .securityContexts(Collections.singletonList(securityContext())).pathMapping("/")
                 .apiInfo(apiInfo());
     }
 
-    private OAuth securitySchema() {
-        List<AuthorizationScope> authorizationScopeList = newArrayList();
-        authorizationScopeList.add(new AuthorizationScope("read", "read all EC2 instances"));
-
-        List<GrantType> grantTypes = newArrayList();
-        GrantType creGrant = new ResourceOwnerPasswordCredentialsGrant( "/oauth/token");
-
-        grantTypes.add(creGrant);
-
-        return new OAuth("oauth2schema", authorizationScopeList, grantTypes);
-    }
-
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.ant("/api/servers/**"))
-                .build();
-    }
-
-    private List<SecurityReference> defaultAuth() {
-
-        final AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = new AuthorizationScope("read", "read all EC2 instances");
-
-        return Collections.singletonList(new SecurityReference("oauth2schema", authorizationScopes));
-    }
-
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Reddit pushshift webservice API").description("Example of pushshift " +
-                " API")
+        return new ApiInfoBuilder().title("EC2 Dashboard API").description("Example of Silver Bars API")
                 .termsOfServiceUrl("http://www.example.com/api")
-                .contact(new Contact("Pavel Hrolovich", null, "pavelhrolovic@gmail.com"))
+                .contact(new Contact("Sunil Yadav", null, "Sunil.Yadav@gmail.com"))
                 .license("Open Source").licenseUrl("")
                 .version("1.0.0").build();
     }
