@@ -9,7 +9,7 @@ import com.gmail.hrolovic.pavel.result.ResultConsumer;
 import com.gmail.hrolovic.pavel.validation.ValidationError;
 import com.gmail.hrolovic.pavel.validation.ValidationService;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 
 public class OfferCalculationRequestProcessor {

@@ -8,12 +8,10 @@ import com.gmail.phrolovich.mapper.DtoMapper;
 import com.gmail.phrolovich.service.PagingSortingService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.LinkedList;
@@ -24,19 +22,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(ServerDashboardController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@RunWith(MockitoJUnitRunner.class)
 public class ServerDashboardControllerTest {
-    @MockBean
+    @Mock
     private AWSServiceGateway awsServiceGateway;
-    @MockBean
+    @Mock
     private PagingSortingService pagingSortingService;
-    @MockBean
+    @Mock
     private DtoMapper mapper;
+    @InjectMocks
+    private ServerDashboardController controller;
 
-    @Autowired
     private MockMvc mockMvc;
+
+    @org.junit.Before
+    public void setUp() {
+        mockMvc = org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup(controller)
+            .setControllerAdvice(new ErrorHandler())
+            .build();
+    }
 
     @Test
 
@@ -78,11 +82,8 @@ public class ServerDashboardControllerTest {
 
     @Test
     public void shouldReturnBadRequestForInvalidRegionCode() throws Exception {
-        List<AWSInstanceData> listItems = new LinkedList<>();
-
         when(awsServiceGateway.describeInstances("invalid"))
             .thenThrow(new IllegalArgumentException("Invalid region"));
-        when(pagingSortingService.sortAndPage(1, 10, "name", Direction.DESC, listItems)).thenReturn(listItems);
 
         mockMvc.perform(
             get("/api/servers/v1")
@@ -94,11 +95,6 @@ public class ServerDashboardControllerTest {
 
     @Test
     public void shouldReturnBadRequestForInvalidDirection() throws Exception {
-        List<AWSInstanceData> listItems = new LinkedList<>();
-
-        when(awsServiceGateway.describeInstances("invalid")).thenReturn(listItems);
-        when(pagingSortingService.sortAndPage(1, 10, "name", Direction.DESC, listItems)).thenReturn(listItems);
-
         mockMvc.perform(
             get("/api/servers/v1")
                 .accept(MediaType.APPLICATION_JSON)

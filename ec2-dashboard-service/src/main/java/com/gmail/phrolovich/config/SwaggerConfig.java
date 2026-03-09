@@ -20,9 +20,8 @@ import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 @Configuration
 @EnableSwagger2
@@ -44,10 +43,10 @@ public class SwaggerConfig {
     }
 
     private OAuth securitySchema() {
-        List<AuthorizationScope> authorizationScopeList = newArrayList();
+        List<AuthorizationScope> authorizationScopeList = new LinkedList<>();
         authorizationScopeList.add(new AuthorizationScope("read", "read all EC2 instances"));
 
-        List<GrantType> grantTypes = newArrayList();
+        List<GrantType> grantTypes = new LinkedList<>();
         GrantType creGrant = new ResourceOwnerPasswordCredentialsGrant( "/oauth/token");
 
         grantTypes.add(creGrant);

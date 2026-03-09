@@ -16,7 +16,8 @@
 
     <properties>
         <java.version>17</java.version>
-        <mockito.version>5.22.0</mockito.version>
+        <junit4.version>4.13.2</junit4.version>
+        <mockito.version>4.11.0</mockito.version>
         <hamcrest.version>2.2</hamcrest.version>
         <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
         <maven.surefire.version>3.5.5</maven.surefire.version>
@@ -31,6 +32,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit4.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
             <scope>test</scope>
         </dependency>
 

@@ -13,16 +13,15 @@ import com.gmail.phrolovich.mapper.DtoMapper;
 import com.gmail.phrolovich.security.STSAuthentication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,15 +32,13 @@ import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class AWSServiceGatewayTest {
-    @MockBean
+    @Mock
     private DtoMapper dtoMapper;
-    @MockBean
+    @Mock
     private AWSServicesFactory awsClientBuilder;
-
-    @Autowired
+    @InjectMocks
     private AWSServiceGateway gateway;
 
     @Test
@@ -58,7 +55,7 @@ public class AWSServiceGatewayTest {
         Mockito.when(amazonEC2.describeInstances(new DescribeInstancesRequest())).thenReturn(result);
         Mockito.when(awsClientBuilder.awsClient(ArgumentMatchers.eq(Regions.EU_CENTRAL_1), ArgumentMatchers.any())).thenReturn(amazonEC2);
 
-        Mockito.when(dtoMapper.fromEC2Instance(new Instance())).thenReturn(new AWSInstanceData());
+        Mockito.when(dtoMapper.fromEC2Instance(ArgumentMatchers.any(Instance.class))).thenReturn(new AWSInstanceData());
 
         List<AWSInstanceData> awsInstanceData = gateway.describeInstances("eu-central-1");
         assertNotNull(awsInstanceData);
@@ -86,7 +83,7 @@ public class AWSServiceGatewayTest {
 
         Mockito.when(awsClientBuilder.awsClient(ArgumentMatchers.eq(Regions.EU_CENTRAL_1), ArgumentMatchers.any())).thenReturn(amazonEC2);
 
-        Mockito.when(dtoMapper.fromEC2Instance(new Instance())).thenReturn(new AWSInstanceData());
+        Mockito.when(dtoMapper.fromEC2Instance(ArgumentMatchers.any(Instance.class))).thenReturn(new AWSInstanceData());
 
         List<AWSInstanceData> awsInstanceData = gateway.describeInstances("eu-central-1");
         assertNotNull(awsInstanceData);

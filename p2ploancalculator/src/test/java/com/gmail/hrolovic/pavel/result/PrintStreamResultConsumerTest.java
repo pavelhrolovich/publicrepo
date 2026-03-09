@@ -58,9 +58,6 @@ public class PrintStreamResultConsumerTest {
 
     @Test
     public void shouldPrintValidationErrors() {
-        ProcessingFailedException processingFailedException = Mockito.mock(ProcessingFailedException.class, "processingFailedException");
-        when(processingFailedException.getMessage()).thenReturn("Test message");
-
         ValidationError first = ValidationError.builder().argumentName("arg1").message("message1").build();
         ValidationError second = ValidationError.builder().argumentName("arg2").message("message2").build();
 

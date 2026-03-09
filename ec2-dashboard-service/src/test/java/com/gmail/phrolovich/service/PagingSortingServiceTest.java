@@ -3,10 +3,6 @@ package com.gmail.phrolovich.service;
 import com.gmail.phrolovich.api.dto.Direction;
 import com.gmail.phrolovich.integration.AWSInstanceData;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,11 +11,8 @@ import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class PagingSortingServiceTest {
-    @Autowired
-    private PagingSortingService service;
+    private final PagingSortingService service = new PagingSortingService();
 
 
     @Test
