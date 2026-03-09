@@ -1,7 +1,5 @@
 package com.gmail.phrolovich.integration;
 
-import com.alicp.jetcache.anno.CacheType;
-import com.alicp.jetcache.anno.Cached;
 import com.amazonaws.auth.AWSSessionCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -27,7 +24,6 @@ public class AWSServiceGateway {
     private final DtoMapper dtoMapper;
     private final AWSServicesFactory awsClientBuilder;
 
-    @Cached(name = "aws-describe-instances", key = "#region", expire = 60, cacheType = CacheType.LOCAL)
     public List<AWSInstanceData> describeInstances(String region) {
         SecurityContext context = SecurityContextHolder.getContext();
         OAuth2Authentication authentication = (OAuth2Authentication) context.getAuthentication();
@@ -45,7 +41,7 @@ public class AWSServiceGateway {
             response.getReservations().stream()
                 .flatMap(reservation -> reservation.getInstances().stream())
                 .map(dtoMapper::fromEC2Instance)
-                .collect(Collectors.toCollection(() -> result));
+                .forEach(result::add);
 
             request.setNextToken(response.getNextToken());
             done = response.getNextToken() == null;

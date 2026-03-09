@@ -1,4 +1,4 @@
 package com.gmail.hrolovic;
 
-public class pavel {
+public class Pavel {
 }

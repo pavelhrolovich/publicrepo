@@ -1,24 +1,24 @@
-# Handle line endings automatically for files detected as message
+# Handle line endings automatically for files detected as text
 # and leave all files detected as binary untouched.
-* message=auto
+* text=auto
 
-# These files are message and should be normalized (Convert crlf => lf)
+# These files are text and should be normalized (Convert crlf => lf)
 
-*.css message
-*.df message
-*.htm message
-*.html message
-*.java message
-*.js message
-*.json message
-*.jsp message
-*.jspf message
-*.properties message
-*.sh message
-*.svg message
-*.tld message
-*.txt message
-*.xml message
+*.css text
+*.df text
+*.htm text
+*.html text
+*.java text
+*.js text
+*.json text
+*.jsp text
+*.jspf text
+*.properties text
+*.sh text
+*.svg text
+*.tld text
+*.txt text
+*.xml text
 
 # These files are binary and should be left untouched
 

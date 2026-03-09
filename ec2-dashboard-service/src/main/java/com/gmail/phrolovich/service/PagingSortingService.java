@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Component
 public class PagingSortingService {
-    private static Map<String, Comparator<AWSInstanceData>> COMPARATOR_MAP = new HashMap<>();
+    private static final Map<String, Comparator<AWSInstanceData>> COMPARATOR_MAP = new HashMap<>();
 
     static {
         COMPARATOR_MAP.put("name", Comparator.comparing(AWSInstanceData::getName).thenComparing(AWSInstanceData::getInstanceId));
@@ -33,11 +33,10 @@ public class PagingSortingService {
         } else {
             items.sort(serverInstanceComparator);
         }
-        if (items.size() < ((page - 1) * itemsPerPage)) {
+        int from = (page - 1) * itemsPerPage;
+        if (!items.isEmpty() && from >= items.size()) {
             throw new IllegalArgumentException("Page is not found: " + page);
         }
-
-        int from = (page - 1) * itemsPerPage;
         int to = Math.min(from + itemsPerPage, items.size());
 
         return items.subList(from, to);
@@ -45,4 +44,3 @@ public class PagingSortingService {
 
 
 }
-
