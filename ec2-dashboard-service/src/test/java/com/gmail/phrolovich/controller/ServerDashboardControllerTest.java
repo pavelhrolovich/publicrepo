@@ -6,11 +6,12 @@ import com.gmail.phrolovich.integration.AWSInstanceData;
 import com.gmail.phrolovich.integration.AWSServiceGateway;
 import com.gmail.phrolovich.mapper.DtoMapper;
 import com.gmail.phrolovich.service.PagingSortingService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ServerDashboardControllerTest {
     @Mock
     private AWSServiceGateway awsServiceGateway;
@@ -35,7 +36,7 @@ public class ServerDashboardControllerTest {
 
     private MockMvc mockMvc;
 
-    @org.junit.Before
+    @BeforeEach
     public void setUp() {
         mockMvc = org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup(controller)
             .setControllerAdvice(new ErrorHandler())

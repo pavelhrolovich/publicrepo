@@ -3,12 +3,11 @@ package com.silverbars.service;
 import com.silverbars.dao.OrderDao;
 import com.silverbars.enums.OrderType;
 import com.silverbars.exception.OrderBoardInvalidOperationException;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.math.BigDecimal;
 
@@ -17,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class OrderServiceImplTest {
 
     @Mock
@@ -67,7 +66,7 @@ public class OrderServiceImplTest {
         // When
         try {
             classToTest.cancelOrder(orderId, user);
-            Assert.fail("Expected exception to be thrown");
+            org.junit.jupiter.api.Assertions.fail("Expected exception to be thrown");
         } catch (OrderBoardInvalidOperationException e) {
             assertThat(e.getMessage(), equalTo("Order Id [1] is already cancelled by user [Test User]"));
         }

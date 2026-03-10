@@ -1,7 +1,6 @@
 package com.gmail.phrolovich.api.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,20 +10,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("Server instance model")
+@Schema(name = "ServerInstance", description = "Server instance model")
 public class ServerInstance {
-    @ApiModelProperty("Server instance ID")
+    @Schema(description = "Server instance ID")
     private String instanceId;
-    @ApiModelProperty("Server instance name")
+    @Schema(description = "Server instance name")
     private String name;
-    @ApiModelProperty("Server instance type")
+    @Schema(description = "Server instance type")
     private String instanceType;
-    @ApiModelProperty("Server instance state")
+    @Schema(description = "Server instance state")
     private String state;
-    @ApiModelProperty("Server instance availability zone")
+    @Schema(description = "Server instance availability zone")
     private String availabilityZone;
-    @ApiModelProperty("Server instance private IP address")
+    @Schema(description = "Server instance private IP address")
     private String privateIpAddress;
-    @ApiModelProperty("Server instance public IP address")
+    @Schema(description = "Server instance public IP address")
     private String publicIpAddress;
 }

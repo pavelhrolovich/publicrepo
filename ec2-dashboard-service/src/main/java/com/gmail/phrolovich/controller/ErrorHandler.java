@@ -1,9 +1,10 @@
 package com.gmail.phrolovich.controller;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -25,16 +26,16 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         if (body == null) {
-            body = new ApiError(status, "Error processing", ex.getMessage());
+            body = new ApiError(HttpStatus.valueOf(status.value()), "Error processing", ex.getMessage());
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
 
 
     @Data
-    @ApiModel("ApiError")
+    @Schema(name = "ApiError")
     public static class ApiError {
         private HttpStatus httpStatus;
         private String message;
