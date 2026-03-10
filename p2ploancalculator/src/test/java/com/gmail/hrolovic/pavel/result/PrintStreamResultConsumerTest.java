@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.PrintStream;
 import java.math.BigDecimal;
@@ -58,9 +58,6 @@ public class PrintStreamResultConsumerTest {
 
     @Test
     public void shouldPrintValidationErrors() {
-        ProcessingFailedException processingFailedException = Mockito.mock(ProcessingFailedException.class, "processingFailedException");
-        when(processingFailedException.getMessage()).thenReturn("Test message");
-
         ValidationError first = ValidationError.builder().argumentName("arg1").message("message1").build();
         ValidationError second = ValidationError.builder().argumentName("arg2").message("message2").build();
 

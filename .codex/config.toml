@@ -1,0 +1,7 @@
+model = "gpt-5-codex"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+reasoning_effort = "medium"
+
+[projects."/mnt/f/Java public repo"]
+trust_level = "trusted"

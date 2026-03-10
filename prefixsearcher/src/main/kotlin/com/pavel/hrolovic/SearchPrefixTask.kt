@@ -7,11 +7,11 @@ class SearchPrefixTask {
         if (prefix.isEmpty()) {
             throw IllegalArgumentException("Prefix cannot be empty")
         }
-        val lowerCasePrefix = prefix.toLowerCase()
+        val lowerCasePrefix = prefix.lowercase()
 
         val firstChar = lowerCasePrefix[0]
         val root = roots.getOrPut(firstChar) { TreeElement(firstChar, 15) }
-        traverseAndCreateTree(root, prefix, 1)
+        traverseAndCreateTree(root, lowerCasePrefix, 1)
     }
 
     fun traverseAndCreateTree(rootElement: TreeElement, input: String, index: Int) {
@@ -23,7 +23,7 @@ class SearchPrefixTask {
     }
 
     fun lookup(word: String): Boolean {
-        val wordLowerCase = word.toLowerCase()
+        val wordLowerCase = word.lowercase()
         val firstCharacter = wordLowerCase.get(0)
         val rootElementForWord = roots.get(firstCharacter) ?: return false
         val findNextCharacter = findNextCharacter(rootElementForWord, wordLowerCase, 1)

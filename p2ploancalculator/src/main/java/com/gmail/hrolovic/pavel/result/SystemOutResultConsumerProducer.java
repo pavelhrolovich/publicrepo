@@ -1,6 +1,6 @@
 package com.gmail.hrolovic.pavel.result;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 public class SystemOutResultConsumerProducer implements Provider<ResultConsumer> {
 
