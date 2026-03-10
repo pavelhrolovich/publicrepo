@@ -1,21 +1,25 @@
 # Public Java Showcase
 
-This repository collects a set of small Java and Kotlin showcase projects ranging from algorithm exercises to Spring Boot APIs. The projects are intentionally independent, so each one keeps its own `pom.xml` and can be built on its own.
+This repository is a collection of small independent Java and Kotlin projects. It includes algorithm exercises, CLI utilities, and Spring Boot APIs that I keep together as a public showcase rather than as a single multi-module build.
+
+Each project has its own `pom.xml`, its own README or notes, and can be built separately.
 
 ## Projects
 
-| Project | Stack | Notes |
+| Project | Stack | What it does |
 | --- | --- | --- |
-| `carpet-slicing` | Java 17, Maven | Small scratch project kept for completeness in the showcase repo. |
-| `carpetslisingtask` | Kotlin 2.3, JUnit 4, Maven | Finds the largest carpet slice without a hole. |
-| `prefixsearcher` | Kotlin 2.3, JUnit 4, Maven | Prefix-tree implementation for fast prefix lookups. |
-| `p2ploancalculator` | Java 17, Guice, Lombok, Maven | CLI loan quote calculator backed by lender CSV data. |
-| `orderboard-app` | Spring Boot 2.7, Maven | REST API for a live order board exercise. |
-| `ec2-dashboard-service` | Spring Boot 2.7, AWS SDK v1, Maven | EC2 dashboard API with caching and Swagger UI support. |
+| `carpet-slicing` | Java 17, Maven | Minimal placeholder module kept in the showcase set. |
+| `carpetslisingtask` | Kotlin, Maven, JUnit 4 | Solves the carpet slicing challenge by finding the largest slice without a hole. |
+| `prefixsearcher` | Kotlin, Maven, JUnit 4 | Prefix-tree based search implementation for fast prefix lookups. |
+| `p2ploancalculator` | Java 17, Maven, Guice, Lombok | Command-line loan quote calculator using lender data from CSV input. |
+| `orderboard-app` | Spring Boot 2.7, Maven | REST API implementation of the Silver Bars live order board exercise. |
+| `ec2-dashboard-service` | Spring Boot 2.7, Maven, AWS SDK v1, Swagger | EC2 dashboard API with paging, sorting, auth, and test coverage. |
 
-## Build
+## Quick Start
 
 Use Java 17 and Maven 3.9+.
+
+Run a project test suite directly:
 
 ```bash
 mvn -B -f carpetslisingtask/pom.xml test
@@ -26,18 +30,29 @@ mvn -B -f ec2-dashboard-service/pom.xml test
 mvn -B -f carpet-slicing/pom.xml test
 ```
 
+Run all showcase modules locally:
+
+```bash
+for project in carpetslisingtask prefixsearcher p2ploancalculator orderboard-app ec2-dashboard-service carpet-slicing; do
+  mvn -B -f "$project/pom.xml" test || exit 1
+done
+```
+
 ## CI
 
-GitHub Actions runs the projects independently through a matrix workflow in [`./.github/workflows/ci.yml`](./.github/workflows/ci.yml).
+GitHub Actions runs the projects independently through the matrix workflow in `./.github/workflows/ci.yml`.
 
-The EC2 dashboard project excludes credentialed end-to-end tests from default CI runs. Those tests still need AWS-specific credentials and should be run intentionally in a configured environment.
+The `ec2-dashboard-service` module excludes credentialed end-to-end tests from normal CI runs. Those tests should only be run in an environment that has the required AWS credentials and configuration.
+
+## Repo Notes
+
+- This repo is intentionally not a Maven aggregator project.
+- Spring Boot modules were modernized to run on Java 17 without doing a full Spring Boot 3 migration.
+- Some module-level docs use different file names such as `README`, `README.md`, or `README.txt`, depending on the original project.
 
 ## Repository Files
 
-- [`./CONTRIBUTING.md`](./CONTRIBUTING.md): contribution and pull request guidelines.
-- [`./AGENTS.md`](./AGENTS.md): repository-specific instructions for Codex and other coding agents.
-- [`./.codex/config.toml`](./.codex/config.toml): local Codex defaults for working in this repo.
-
-## Notes
-
-The Spring projects were upgraded to the latest practical versions that fit their pre-Jakarta codebase without a full framework rewrite. If you want them moved to Spring Boot 3/4 later, that should be handled as a separate migration.
+- `README.md`: top-level repo overview.
+- `CONTRIBUTING.md`: contribution and pull request guidance.
+- `AGENTS.md`: instructions for coding agents working in this repo.
+- `.codex/config.toml`: Codex defaults for this workspace.
