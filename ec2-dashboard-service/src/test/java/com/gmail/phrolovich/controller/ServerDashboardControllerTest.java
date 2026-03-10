@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -49,8 +50,19 @@ public class ServerDashboardControllerTest {
         List<AWSInstanceData> listItems = new LinkedList<>();
         for (int i = 0; i < 20; i++) {
             listItems.add(createAwsInstance(i));
-            when(mapper.fromAwsInstance(createAwsInstance(i))).thenReturn(createInstance(i));
         }
+        when(mapper.fromAwsInstance(any(AWSInstanceData.class))).thenAnswer(invocation -> {
+            AWSInstanceData source = invocation.getArgument(0);
+            ServerInstance serverInstance = new ServerInstance();
+            serverInstance.setName(source.getName().replace("AWSInstanceData", "name"));
+            serverInstance.setInstanceId(source.getInstanceId());
+            serverInstance.setState(source.getState());
+            serverInstance.setInstanceType(source.getInstanceType());
+            serverInstance.setAvailabilityZone(source.getAvailabilityZone());
+            serverInstance.setPrivateIpAddress(source.getPrivateIpAddress());
+            serverInstance.setPublicIpAddress(source.getPublicIpAddress());
+            return serverInstance;
+        });
 
         when(awsServiceGateway.describeInstances("eu-central-1")).thenReturn(listItems);
         when(pagingSortingService.sortAndPage(1, 10, "name", Direction.DESC, listItems)).thenReturn(listItems.subList(0, 10));

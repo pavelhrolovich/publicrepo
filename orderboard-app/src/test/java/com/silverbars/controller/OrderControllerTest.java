@@ -1,6 +1,5 @@
 package com.silverbars.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.silverbars.bean.Order;
 import com.silverbars.bean.OrderRequest;
 import com.silverbars.bean.OrderSummary;
@@ -19,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
+
+import tools.jackson.databind.ObjectMapper;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;

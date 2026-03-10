@@ -30,7 +30,7 @@ public class OrderController {
         try {
             String effectiveUser = orderRequest.getUser() != null ? orderRequest.getUser() : user;
             Order order = orderService.registerOrder(effectiveUser, orderRequest.getQuantity(), orderRequest.getPrice(), orderRequest.getOrderType());
-            return new ResponseEntity<>(order, HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(order);
         } catch (Exception e) {
             String errorMessage = "Unable to register order";
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, errorMessage, e);
@@ -45,7 +45,7 @@ public class OrderController {
                 String errorMessage = "No Live Orders found in the system";
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
             } else {
-                return new ResponseEntity<>(orderSummaryHolder, HttpStatus.OK);
+                return ResponseEntity.ok(orderSummaryHolder);
             }
         } catch (ResponseStatusException e) {
             throw e;
@@ -63,7 +63,7 @@ public class OrderController {
     public ResponseEntity<Order> cancelOrder(@PathVariable long orderId, @RequestParam(defaultValue = "Test User") String user) {
         try {
             Order order = orderService.cancelOrder(orderId, user);
-            return new ResponseEntity<>(order, HttpStatus.OK);
+            return ResponseEntity.ok(order);
         } catch (OrderBoardInvalidOperationException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (Exception e) {
