@@ -85,12 +85,6 @@ public class OrderControllerTest {
         resultOrderSummaryHolder.addSellOrderSummaries(Lists.newArrayList(sellOrderSummary1, sellOrderSummary2));
 
         when(orderService.getLiveOrders()).thenReturn(resultOrderSummaryHolder);
-
-//        Actual   :<{buyOrderSummary=[{"quantity":2.3,"price":1,"orderType":"BUY"},{"quantity":4.2,"price":10,"orderType":"BUY"}],
-//            sellOrderSummary=[{"quantity":3.4,"price":1,"orderType":"SELL"},{"quantity":5.7,"price":1,"orderType":"SELL"}]}>
-
-//        The last thing to note is that for SELL orders the orders with lowest prices are displayed first.
-// Opposite is true for the BUY orders.
         // When
         this.mockMvc.perform(get("/order"))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

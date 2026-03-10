@@ -14,8 +14,8 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderServiceImplTest {
@@ -60,12 +60,14 @@ public class OrderServiceImplTest {
         // Given
         long orderId = 1;
         String user = "Test User";
-        when(classToTest.cancelOrder(orderId, user)).thenThrow(new OrderBoardInvalidOperationException("Order Id [1] is already cancelled by user [Test User]"));
+        doThrow(new OrderBoardInvalidOperationException("Order Id [1] is already cancelled by user [Test User]"))
+                .when(orderDao)
+                .cancelOrder(orderId, user);
 
         // When
         try {
             classToTest.cancelOrder(orderId, user);
-            Assert.fail("Excepted exception to be thrown");
+            Assert.fail("Expected exception to be thrown");
         } catch (OrderBoardInvalidOperationException e) {
             assertThat(e.getMessage(), equalTo("Order Id [1] is already cancelled by user [Test User]"));
         }

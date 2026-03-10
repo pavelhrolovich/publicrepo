@@ -27,10 +27,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AWSServiceGatewayTest {
@@ -52,7 +54,7 @@ public class AWSServiceGatewayTest {
 
         AmazonEC2 amazonEC2 = Mockito.mock(AmazonEC2.class);
         DescribeInstancesResult result = createResult(createList(10), null);
-        Mockito.when(amazonEC2.describeInstances(new DescribeInstancesRequest())).thenReturn(result);
+        Mockito.when(amazonEC2.describeInstances(any(DescribeInstancesRequest.class))).thenReturn(result);
         Mockito.when(awsClientBuilder.awsClient(ArgumentMatchers.eq(Regions.EU_CENTRAL_1), ArgumentMatchers.any())).thenReturn(amazonEC2);
 
         Mockito.when(dtoMapper.fromEC2Instance(ArgumentMatchers.any(Instance.class))).thenReturn(new AWSInstanceData());
@@ -75,11 +77,19 @@ public class AWSServiceGatewayTest {
 
         AmazonEC2 amazonEC2 = Mockito.mock(AmazonEC2.class);
 
-        Mockito.when(amazonEC2.describeInstances(new DescribeInstancesRequest())).thenReturn(createResult(createList(10), "AAAA"));
-
-        DescribeInstancesRequest request = new DescribeInstancesRequest();
-        request.setNextToken("AAAA");
-        Mockito.when(amazonEC2.describeInstances(request)).thenReturn(createResult(createList(15), null));
+        List<String> observedTokens = new ArrayList<>();
+        Mockito.when(amazonEC2.describeInstances(any(DescribeInstancesRequest.class)))
+                .thenAnswer(invocation -> {
+                    DescribeInstancesRequest request = invocation.getArgument(0);
+                    observedTokens.add(request == null ? null : request.getNextToken());
+                    if (request == null || request.getNextToken() == null) {
+                        return createResult(createList(10), "AAAA");
+                    }
+                    if ("AAAA".equals(request.getNextToken())) {
+                        return createResult(createList(15), null);
+                    }
+                    return createResult(createList(0), null);
+                });
 
         Mockito.when(awsClientBuilder.awsClient(ArgumentMatchers.eq(Regions.EU_CENTRAL_1), ArgumentMatchers.any())).thenReturn(amazonEC2);
 
@@ -88,6 +98,8 @@ public class AWSServiceGatewayTest {
         List<AWSInstanceData> awsInstanceData = gateway.describeInstances("eu-central-1");
         assertNotNull(awsInstanceData);
         assertEquals(25, awsInstanceData.size());
+        Mockito.verify(amazonEC2, Mockito.times(2)).describeInstances(any(DescribeInstancesRequest.class));
+        assertEquals(Arrays.asList(null, "AAAA"), observedTokens);
     }
 
     private DescribeInstancesResult createResult(List<Instance> list, String nextToken) {
@@ -120,9 +132,5 @@ public class AWSServiceGatewayTest {
         source.setState(state);
 
         return source;
-    }
-
-    private Instance createInstance() {
-        return new Instance();
     }
 }

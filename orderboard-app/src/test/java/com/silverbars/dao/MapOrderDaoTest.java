@@ -96,7 +96,7 @@ public class MapOrderDaoTest {
         // When
         try {
             classToTest.cancelOrder(invalidOrderId, cancelOrderUser);
-            Assert.fail("Excepted exception to be thrown");
+            Assert.fail("Expected exception to be thrown");
         } catch (OrderBoardInvalidOperationException e) {
             assertThat(e.getMessage(), equalTo("Unable to find Order Id [10] in the system. Please supply the correct OrderId for cancellation"));
         }
@@ -120,7 +120,7 @@ public class MapOrderDaoTest {
         // When
         try {
             classToTest.cancelOrder(existingOrder.getOrderId(), cancelOrderUser2);
-            Assert.fail("Excepted exception to be thrown");
+            Assert.fail("Expected exception to be thrown");
         } catch (OrderBoardInvalidOperationException e) {
             assertThat(e.getMessage(), equalTo("Order Id [1] is already cancelled by user [Cancel User 1]"));
         }

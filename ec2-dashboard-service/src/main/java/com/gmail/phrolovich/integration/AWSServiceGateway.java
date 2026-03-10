@@ -27,11 +27,11 @@ public class AWSServiceGateway {
     public List<AWSInstanceData> describeInstances(String region) {
         SecurityContext context = SecurityContextHolder.getContext();
         OAuth2Authentication authentication = (OAuth2Authentication) context.getAuthentication();
-        STSAuthentication credentialsCredentials = (STSAuthentication) authentication.getUserAuthentication();
+        STSAuthentication stsAuthentication = (STSAuthentication) authentication.getUserAuthentication();
 
         DescribeInstancesRequest request = new DescribeInstancesRequest();
         Regions awsRegionFromName = Regions.fromName(region);
-        AmazonEC2 amazonEC2 = awsClientBuilder.awsClient(awsRegionFromName, (AWSSessionCredentials) credentialsCredentials.getCredentials());
+        AmazonEC2 amazonEC2 = awsClientBuilder.awsClient(awsRegionFromName, (AWSSessionCredentials) stsAuthentication.getCredentials());
 
         List<AWSInstanceData> result = new LinkedList<>();
         boolean done = false;
