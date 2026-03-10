@@ -6,23 +6,25 @@ import com.gmail.phrolovich.integration.AWSInstanceData;
 import com.gmail.phrolovich.integration.AWSServiceGateway;
 import com.gmail.phrolovich.mapper.DtoMapper;
 import com.gmail.phrolovich.service.PagingSortingService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ServerDashboardControllerTest {
     @Mock
     private AWSServiceGateway awsServiceGateway;
@@ -35,7 +37,7 @@ public class ServerDashboardControllerTest {
 
     private MockMvc mockMvc;
 
-    @org.junit.Before
+    @BeforeEach
     public void setUp() {
         mockMvc = org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup(controller)
             .setControllerAdvice(new ErrorHandler())
@@ -48,8 +50,19 @@ public class ServerDashboardControllerTest {
         List<AWSInstanceData> listItems = new LinkedList<>();
         for (int i = 0; i < 20; i++) {
             listItems.add(createAwsInstance(i));
-            when(mapper.fromAwsInstance(createAwsInstance(i))).thenReturn(createInstance(i));
         }
+        when(mapper.fromAwsInstance(any(AWSInstanceData.class))).thenAnswer(invocation -> {
+            AWSInstanceData source = invocation.getArgument(0);
+            ServerInstance serverInstance = new ServerInstance();
+            serverInstance.setName(source.getName().replace("AWSInstanceData", "name"));
+            serverInstance.setInstanceId(source.getInstanceId());
+            serverInstance.setState(source.getState());
+            serverInstance.setInstanceType(source.getInstanceType());
+            serverInstance.setAvailabilityZone(source.getAvailabilityZone());
+            serverInstance.setPrivateIpAddress(source.getPrivateIpAddress());
+            serverInstance.setPublicIpAddress(source.getPublicIpAddress());
+            return serverInstance;
+        });
 
         when(awsServiceGateway.describeInstances("eu-central-1")).thenReturn(listItems);
         when(pagingSortingService.sortAndPage(1, 10, "name", Direction.DESC, listItems)).thenReturn(listItems.subList(0, 10));

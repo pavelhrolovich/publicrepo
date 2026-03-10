@@ -2,14 +2,16 @@ package com.gmail.phrolovich.service;
 
 import com.gmail.phrolovich.api.dto.Direction;
 import com.gmail.phrolovich.integration.AWSInstanceData;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PagingSortingServiceTest {
     private final PagingSortingService service = new PagingSortingService();
@@ -34,9 +36,10 @@ public class PagingSortingServiceTest {
         assertEquals(2, result.size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowErrorIfOutOfRange() {
-        service.sortAndPage(15, 10, "name", Direction.DESC, createList(50));
+        assertThrows(IllegalArgumentException.class,
+                () -> service.sortAndPage(15, 10, "name", Direction.DESC, createList(50)));
     }
 
     @Test

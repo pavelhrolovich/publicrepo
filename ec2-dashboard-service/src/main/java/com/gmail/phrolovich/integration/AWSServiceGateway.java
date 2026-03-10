@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
@@ -26,8 +25,7 @@ public class AWSServiceGateway {
 
     public List<AWSInstanceData> describeInstances(String region) {
         SecurityContext context = SecurityContextHolder.getContext();
-        OAuth2Authentication authentication = (OAuth2Authentication) context.getAuthentication();
-        STSAuthentication stsAuthentication = (STSAuthentication) authentication.getUserAuthentication();
+        STSAuthentication stsAuthentication = (STSAuthentication) context.getAuthentication();
 
         DescribeInstancesRequest request = new DescribeInstancesRequest();
         Regions awsRegionFromName = Regions.fromName(region);

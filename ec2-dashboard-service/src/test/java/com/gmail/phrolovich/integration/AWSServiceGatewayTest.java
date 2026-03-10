@@ -11,17 +11,16 @@ import com.amazonaws.services.ec2.model.Placement;
 import com.amazonaws.services.ec2.model.Reservation;
 import com.gmail.phrolovich.mapper.DtoMapper;
 import com.gmail.phrolovich.security.STSAuthentication;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,10 +30,11 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AWSServiceGatewayTest {
     @Mock
     private DtoMapper dtoMapper;
@@ -45,11 +45,9 @@ public class AWSServiceGatewayTest {
 
     @Test
     public void shouldLoadAwsDataSinglePage() {
-        OAuth2Authentication oAuth2Authentication = Mockito.mock(OAuth2Authentication.class);
-        Mockito.when(oAuth2Authentication.getUserAuthentication()).thenReturn(new STSAuthentication(new BasicSessionCredentials("A", "B", "C"),
-                Collections.singletonList(new SimpleGrantedAuthority("read"))));
         SecurityContext mock = Mockito.mock(SecurityContext.class);
-        Mockito.when(mock.getAuthentication()).thenReturn(oAuth2Authentication);
+        Mockito.when(mock.getAuthentication()).thenReturn(new STSAuthentication(new BasicSessionCredentials("A", "B", "C"),
+                Collections.singletonList(new SimpleGrantedAuthority("read"))));
         SecurityContextHolder.setContext(mock);
 
         AmazonEC2 amazonEC2 = Mockito.mock(AmazonEC2.class);
@@ -68,11 +66,9 @@ public class AWSServiceGatewayTest {
 
     @Test
     public void shouldLoadAwsDataMultiPage() {
-        OAuth2Authentication oAuth2Authentication = Mockito.mock(OAuth2Authentication.class);
-        Mockito.when(oAuth2Authentication.getUserAuthentication()).thenReturn(new STSAuthentication(new BasicSessionCredentials("A", "B", "C"),
-                Collections.singletonList(new SimpleGrantedAuthority("read"))));
         SecurityContext mock = Mockito.mock(SecurityContext.class);
-        Mockito.when(mock.getAuthentication()).thenReturn(oAuth2Authentication);
+        Mockito.when(mock.getAuthentication()).thenReturn(new STSAuthentication(new BasicSessionCredentials("A", "B", "C"),
+                Collections.singletonList(new SimpleGrantedAuthority("read"))));
         SecurityContextHolder.setContext(mock);
 
         AmazonEC2 amazonEC2 = Mockito.mock(AmazonEC2.class);

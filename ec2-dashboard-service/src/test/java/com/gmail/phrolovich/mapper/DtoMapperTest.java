@@ -5,9 +5,10 @@ import com.amazonaws.services.ec2.model.InstanceState;
 import com.amazonaws.services.ec2.model.Placement;
 import com.gmail.phrolovich.api.dto.ServerInstance;
 import com.gmail.phrolovich.integration.AWSInstanceData;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DtoMapperTest {
     private final DtoMapper dtoMapper = new DtoMapper();

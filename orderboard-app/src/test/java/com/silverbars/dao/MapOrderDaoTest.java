@@ -6,13 +6,10 @@ import com.silverbars.bean.OrderSummary;
 import com.silverbars.bean.OrderSummaryHolder;
 import com.silverbars.enums.OrderType;
 import com.silverbars.exception.OrderBoardInvalidOperationException;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -22,7 +19,6 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MapOrderDaoTest {
@@ -96,7 +92,7 @@ public class MapOrderDaoTest {
         // When
         try {
             classToTest.cancelOrder(invalidOrderId, cancelOrderUser);
-            Assert.fail("Expected exception to be thrown");
+            org.junit.jupiter.api.Assertions.fail("Expected exception to be thrown");
         } catch (OrderBoardInvalidOperationException e) {
             assertThat(e.getMessage(), equalTo("Unable to find Order Id [10] in the system. Please supply the correct OrderId for cancellation"));
         }
@@ -120,7 +116,7 @@ public class MapOrderDaoTest {
         // When
         try {
             classToTest.cancelOrder(existingOrder.getOrderId(), cancelOrderUser2);
-            Assert.fail("Expected exception to be thrown");
+            org.junit.jupiter.api.Assertions.fail("Expected exception to be thrown");
         } catch (OrderBoardInvalidOperationException e) {
             assertThat(e.getMessage(), equalTo("Order Id [1] is already cancelled by user [Cancel User 1]"));
         }
