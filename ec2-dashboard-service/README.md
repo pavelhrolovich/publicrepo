@@ -16,4 +16,4 @@ Run it locally with:
 
 ## Security note
 
-Do not send AWS credentials or OAuth tokens over plain HTTP. If you deploy this service outside local development, terminate TLS and expose only HTTPS endpoints for any credential-bearing flow.
+Do not send AWS credentials over plain HTTP. If you deploy this service outside local development, terminate TLS and expose only HTTPS endpoints for any credential-bearing flow.
