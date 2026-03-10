@@ -29,9 +29,9 @@ public class ServerDashboardController implements ServerDashboardApi {
         binder.registerCustomEditor(Direction.class, new DirectionPropertyEditor());
     }
 
-    public List<ServerInstance> loadPage(int page, String soring, Direction direction, String region) {
+    public List<ServerInstance> loadPage(int page, String sorting, Direction direction, String region) {
         List<AWSInstanceData> instanceData = awsServiceGateway.describeInstances(region);
-        List<AWSInstanceData> itemsOnPage = pagingSortingService.sortAndPage(page, ITEMS_PER_PAGE, soring,direction, instanceData);
+        List<AWSInstanceData> itemsOnPage = pagingSortingService.sortAndPage(page, ITEMS_PER_PAGE, sorting, direction, instanceData);
         return itemsOnPage.stream().map(mapper::fromAwsInstance).collect(Collectors.toList());
     }
 

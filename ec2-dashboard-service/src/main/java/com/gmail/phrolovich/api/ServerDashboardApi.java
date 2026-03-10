@@ -31,7 +31,7 @@ public interface ServerDashboardApi {
     @GetMapping
     @ResponseBody
     List<ServerInstance> loadPage(@ApiParam(value = "Page to view, each page has 10 elements", example = "1") @RequestParam(value = "page", defaultValue = "1") @Min(value = 1) int page,
-                                  @ApiParam(value = "Field to sort by", example = "name") @RequestParam(value = "sorting", defaultValue = "name") String soring,
+                                  @ApiParam(value = "Field to sort by", example = "name") @RequestParam(value = "sorting", defaultValue = "name") String sorting,
                                   @ApiParam(value = "Direction for sorting, either DESC or ASC", example = "desc") @RequestParam(value = "direction", defaultValue = "asc") Direction direction,
                                   @ApiParam(value = "AWS Region to load instances for", example = "eu-central-1") @RequestParam(value = "region") String region);
 

@@ -47,7 +47,7 @@ public class SwaggerConfig {
         authorizationScopeList.add(new AuthorizationScope("read", "read all EC2 instances"));
 
         List<GrantType> grantTypes = new LinkedList<>();
-        GrantType creGrant = new ResourceOwnerPasswordCredentialsGrant( "/oauth/token");
+        GrantType creGrant = new ResourceOwnerPasswordCredentialsGrant("/oauth/token");
 
         grantTypes.add(creGrant);
 

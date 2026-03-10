@@ -28,7 +28,8 @@ public class OrderController {
     @PostMapping("/order")
     public ResponseEntity<Order> registerOrder(@RequestBody OrderRequest orderRequest, @RequestParam(defaultValue = "Test User") String user) {
         try {
-            Order order = orderService.registerOrder(user, orderRequest.getQuantity(), orderRequest.getPrice(), orderRequest.getOrderType());
+            String effectiveUser = orderRequest.getUser() != null ? orderRequest.getUser() : user;
+            Order order = orderService.registerOrder(effectiveUser, orderRequest.getQuantity(), orderRequest.getPrice(), orderRequest.getOrderType());
             return new ResponseEntity<>(order, HttpStatus.CREATED);
         } catch (Exception e) {
             String errorMessage = "Unable to register order";

@@ -15,7 +15,7 @@ public class PagingSortingService {
 
     static {
         COMPARATOR_MAP.put("name", Comparator.comparing(AWSInstanceData::getName).thenComparing(AWSInstanceData::getInstanceId));
-        COMPARATOR_MAP.put("instanceid", Comparator.comparing(AWSInstanceData::getInstanceId).thenComparing(AWSInstanceData::getInstanceId));
+        COMPARATOR_MAP.put("instanceid", Comparator.comparing(AWSInstanceData::getInstanceId));
         COMPARATOR_MAP.put("instancetype", Comparator.comparing(AWSInstanceData::getInstanceType).thenComparing(AWSInstanceData::getInstanceId));
         COMPARATOR_MAP.put("state", Comparator.comparing(AWSInstanceData::getState).thenComparing(AWSInstanceData::getInstanceId));
         COMPARATOR_MAP.put("availabilityzone", Comparator.comparing(AWSInstanceData::getAvailabilityZone).thenComparing(AWSInstanceData::getInstanceId));
