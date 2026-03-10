@@ -12,12 +12,12 @@ Each project has its own `pom.xml`, its own README or notes, and can be built se
 | `carpetslisingtask` | Kotlin, Maven, JUnit 4 | Solves the carpet slicing challenge by finding the largest slice without a hole. |
 | `prefixsearcher` | Kotlin, Maven, JUnit 4 | Prefix-tree based search implementation for fast prefix lookups. |
 | `p2ploancalculator` | Java 17, Maven, Guice, Lombok | Command-line loan quote calculator using lender data from CSV input. |
-| `orderboard-app` | Spring Boot 2.7, Maven | REST API implementation of the Silver Bars live order board exercise. |
-| `ec2-dashboard-service` | Spring Boot 2.7, Maven, AWS SDK v1, Swagger | EC2 dashboard API with paging, sorting, auth, and test coverage. |
+| `orderboard-app` | Java 17+, Spring Boot 4, Maven | REST API implementation of the Silver Bars live order board exercise. |
+| `ec2-dashboard-service` | Java 17+, Spring Boot 4, Maven, AWS SDK v1, springdoc | EC2 dashboard API with paging, sorting, HTTP Basic auth, and test coverage. |
 
 ## Quick Start
 
-Use Java 17 and Maven 3.9+.
+Use Java 17 or newer and Maven 3.9+.
 
 Run a project test suite directly:
 
@@ -47,7 +47,7 @@ The `ec2-dashboard-service` module excludes credentialed end-to-end tests from n
 ## Repo Notes
 
 - This repo is intentionally not a Maven aggregator project.
-- Spring Boot modules were modernized to run on Java 17 without doing a full Spring Boot 3 migration.
+- The Spring Boot modules are now on Spring Boot 4 and are currently tested in CI on Temurin 17.
 - Some module-level docs use different file names such as `README`, `README.md`, or `README.txt`, depending on the original project.
 
 ## Repository Files
